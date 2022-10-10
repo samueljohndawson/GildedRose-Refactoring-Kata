@@ -1,5 +1,5 @@
 class Item {
-  constructor(name, sellIn, quality){
+  constructor(name, sellIn, quality) {
     this.name = name;
     this.sellIn = sellIn;
     this.quality = quality;
@@ -7,57 +7,76 @@ class Item {
 }
 
 class Shop {
-  constructor(items=[]){
+  constructor(items = []) {
     this.items = items;
   }
+
+
   updateQuality() {
-    for (let i = 0; i < this.items.length; i++) {
-      if (this.items[i].name != 'Aged Brie' && this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-        if (this.items[i].quality > 0) {
-          if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-            this.items[i].quality = this.items[i].quality - 1;
-          }
+    for (let item of this.items) {
+      if (!this.isBrie(item) && !this.isBackstagePass(item) && this.hasZeroQuality(item)) {
+        if (!this.isLegendary(item)) {
+          item.quality--
         }
+
       } else {
-        if (this.items[i].quality < 50) {
-          this.items[i].quality = this.items[i].quality + 1;
-          if (this.items[i].name == 'Backstage passes to a TAFKAL80ETC concert') {
-            if (this.items[i].sellIn < 11) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1;
+        if (!this.hasMaxQuality(item)) {
+          item.quality++
+          if (this.isBackstagePass(item)) {
+            if (!this.hasMaxQuality(item)) {
+              if (item.sellIn < 11) {
+                item.quality++
               }
-            }
-            if (this.items[i].sellIn < 6) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1;
+              if (item.sellIn < 6) {
+                item.quality++
               }
             }
           }
         }
       }
-      if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-        this.items[i].sellIn = this.items[i].sellIn - 1;
+      if (!this.isLegendary(item)) {
+        item.sellIn--
       }
-      if (this.items[i].sellIn < 0) {
-        if (this.items[i].name != 'Aged Brie') {
-          if (this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-            if (this.items[i].quality > 0) {
-              if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-                this.items[i].quality = this.items[i].quality - 1;
+      if (item.sellIn < 0) {
+        if (!this.isBrie(item)) {
+          if (!this.isBackstagePass(item)) {
+            if (item.quality > 0) {
+              if (!this.isLegendary(item)) {
+                item.quality--
               }
             }
           } else {
-            this.items[i].quality = this.items[i].quality - this.items[i].quality;
+            item.quality = 0
           }
         } else {
-          if (this.items[i].quality < 50) {
-            this.items[i].quality = this.items[i].quality + 1;
+          if (!this.hasMaxQuality(item)) {
+            item.quality++
           }
         }
       }
     }
 
     return this.items;
+  }
+
+  hasMaxQuality(anItem) {
+    return anItem.quality >= 50;
+  }
+
+  hasZeroQuality(anItem) {
+    return anItem.quality > 0;
+  }
+
+  isBackstagePass(anItem) {
+    return anItem.name == 'Backstage passes to a TAFKAL80ETC concert';
+  }
+
+  isBrie(anItem) {
+    return anItem.name == 'Aged Brie';
+  }
+
+  isLegendary(anItem) {
+    return anItem.name == 'Sulfuras, Hand of Ragnaros';
   }
 }
 
