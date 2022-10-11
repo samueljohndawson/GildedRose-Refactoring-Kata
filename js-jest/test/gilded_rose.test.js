@@ -21,7 +21,7 @@ describe("Gilded Rose", function () {
     expect(items[0].quality).toBe(8);
   });
 
-  it("qualityOfAnItemIsNeverNegative", function () {
+  it("qualityOfANormalItemIsNeverNegative", function () {
     const gildedRose = new Shop([new Item("item1", 0, 0)]);
     const items = gildedRose.updateQuality();
     expect(items[0].quality).toBe(0);
@@ -52,9 +52,9 @@ describe("Gilded Rose", function () {
   });
 
   it("sulfurasQualityDoesNotReduce", function () {
-    const gildedRose = new Shop([new Item("Sulfuras, Hand of Ragnaros", 10, 11)]);
+    const gildedRose = new Shop([new Item("Sulfuras, Hand of Ragnaros", 10, 80)]);
     const items = gildedRose.updateQuality();
-    expect(items[0].quality).toBe(11);
+    expect(items[0].quality).toBe(80);
   });
 
   it("backstagePassesIncreasesByTwoWhenSellInIsMoreThanFiveAndLessThanEleven1", function () {
@@ -87,11 +87,28 @@ describe("Gilded Rose", function () {
     expect(items[0].quality).toBe(0);
   });
 
-  // it("conjuredItemsQualityDegradesTwiceAsFast", function() {
-  //   const gildedRose = new Shop([new Item("Backstage passes to a TAFKAL80ETC concert", 0, 11)]);
-  //   const items = gildedRose.updateQuality();
-  //   expect(items[0].quality).toBe(0);
-  // });
+  it("conjuredItemsQualityDegradesTwiceAsFast", function () {
+    const gildedRose = new Shop([new Item("Conjured Mana Cake", 0, 11)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].quality).toBe(7);
+  });
+
+  it("conjuredItemsNeverHaveLessThanZeroQuality", function () {
+    const gildedRose = new Shop([new Item("Conjured Mana Cake", 0, 1)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].quality).toBe(0);
+  });
+  it("BackstagePassesNeverHaveLessThanZeroQuality", function () {
+    const gildedRose = new Shop([new Item("Backstage passes to a TAFKAL80ETC concert", -1, 0)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].quality).toBe(0);
+  });
+  it("SulfurasAlwaysHasEightyQuality", function () {
+    const gildedRose = new Shop([new Item("Sulfuras, Hand of Ragnaros", -1, 0)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].quality).toBe(80);
+  });
+
 });
 
 describe("Gilded Rose", function () {
@@ -123,7 +140,7 @@ Sulfuras, Hand of Ragnaros, -1, 80
 Backstage passes to a TAFKAL80ETC concert, 14, 21
 Backstage passes to a TAFKAL80ETC concert, 9, 50
 Backstage passes to a TAFKAL80ETC concert, 4, 50
-Conjured Mana Cake, 2, 5
+Conjured Mana Cake, 2, 4
 
 -------- day 2 --------
 name, sellIn, quality
@@ -135,7 +152,7 @@ Sulfuras, Hand of Ragnaros, -1, 80
 Backstage passes to a TAFKAL80ETC concert, 13, 22
 Backstage passes to a TAFKAL80ETC concert, 8, 50
 Backstage passes to a TAFKAL80ETC concert, 3, 50
-Conjured Mana Cake, 1, 4
+Conjured Mana Cake, 1, 2
 
 -------- day 3 --------
 name, sellIn, quality
@@ -147,7 +164,7 @@ Sulfuras, Hand of Ragnaros, -1, 80
 Backstage passes to a TAFKAL80ETC concert, 12, 23
 Backstage passes to a TAFKAL80ETC concert, 7, 50
 Backstage passes to a TAFKAL80ETC concert, 2, 50
-Conjured Mana Cake, 0, 3
+Conjured Mana Cake, 0, 0
 
 -------- day 4 --------
 name, sellIn, quality
@@ -159,7 +176,7 @@ Sulfuras, Hand of Ragnaros, -1, 80
 Backstage passes to a TAFKAL80ETC concert, 11, 24
 Backstage passes to a TAFKAL80ETC concert, 6, 50
 Backstage passes to a TAFKAL80ETC concert, 1, 50
-Conjured Mana Cake, -1, 1
+Conjured Mana Cake, -1, 0
 
 -------- day 5 --------
 name, sellIn, quality

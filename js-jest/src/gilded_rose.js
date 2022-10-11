@@ -9,8 +9,11 @@ class Item {
 const ItemTypes = {
   BRIE: 'Aged Brie',
   PASS: 'Backstage passes to a TAFKAL80ETC concert',
-  HAND: 'Sulfuras, Hand of Ragnaros'
+  HAND: 'Sulfuras, Hand of Ragnaros',
+  CONJURED: 'Conjured Mana Cake'
 };
+
+
 
 function updateBrie(item) {
 
@@ -25,6 +28,7 @@ function updateBrie(item) {
   }
 }
 function updateHand(item) {
+  item.quality = 80;
 }
 function updatePass(item) {
 
@@ -43,6 +47,22 @@ function updatePass(item) {
   if (item.sellIn < 0) {
     item.quality = item.quality - item.quality;
   }
+}
+function updateConjured(item) {
+  if (item.quality > 0) {
+    item.quality = item.quality - 2;
+  }
+
+  item.sellIn--;
+
+  if (item.sellIn < 0 && item.quality > 0) {
+    item.quality = item.quality - 2;
+  }
+
+  if (item.quality < 0) {
+    item.quality = 0
+  }
+
 }
 function updateNormal(item) {
 
@@ -73,6 +93,9 @@ class Shop {
           continue;
         case ItemTypes.PASS:
           updatePass(item);
+          continue;
+        case ItemTypes.CONJURED:
+          updateConjured(item);
           continue;
         default:
           updateNormal(item);
